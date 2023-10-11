@@ -16,13 +16,12 @@ import { builtTweet } from "./tweetListView.js"; // importo vista en la function
 
 export const tweetListController = () => {
     tweets.forEach(tweet => {
-    
         const tweetContainer = document.createElement('div'); 
-    
-        tweetContainer.innerHTML = builtTweet(tweet);
-    
-        const tweetlist = document.getElementById('tweets');
+        tweetContainer.classList.add('tweet'); // le añado la clase tweet paarq eu se aplique 
 
+        tweetContainer.innerHTML = builtTweet(tweet);
+
+        const tweetlist = document.getElementById('tweets');
         tweetlist.appendChild(tweetContainer)
     })
 } 
