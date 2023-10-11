@@ -32,16 +32,20 @@
         .tweet p {
             margin: 0;
         }
-    </style>
 
+        #tweets.hidden {
+            display: none; 
+        }
+
+    </style>
 
 </head>
 <body>
     <h1>Tweeter Clone</h1>
-
-    <section id="tweets">
-
-    </section>
+    <button id="loadTweets">Cargar tweets</button>
+    <button id="removeTweets">Eliminar tweets</button>
+    <button id="hideTweets">Esconder/mostrar tweets</button>
+    <section id="tweets"></section>
     
     <script type="module" src="./index.js"></script>
 </body>
