@@ -10,19 +10,19 @@
  * en nuetro caso gestiona esta sección : <script type="module" src="./index.js"></script>
  * */
 
+import { tweets } from "./tweetListModel.js"; // importo para iterar la variable
+import { builtTweet } from "./tweetListView.js"; // importo vista en la function
 
 
-import { tweets } from "./tweetListModel" // importo para iterar la variable
-import { builtTweet } from "./tweetListView"; // importo vista en la function
+export const tweetListController = () => {
+    tweets.forEach(tweet => {
+    
+        const tweetContainer = document.createElement('div'); 
+    
+        tweetContainer.innerHTML = builtTweet(tweet);
+    
+        const tweetlist = document.getElementById('tweets');
 
-
-
-tweets.forEach(tweet => {
-
-    const tweetContainer = document.createElement('div'); 
-
-    tweetContainer.innerHTML = builtTweet(tweet);
-
-    const tweetlist = document.getElementById('tweets');
-    tweetlist.appendChild(tweetContainer)
-})
+        tweetlist.appendChild(tweetContainer)
+    })
+} 

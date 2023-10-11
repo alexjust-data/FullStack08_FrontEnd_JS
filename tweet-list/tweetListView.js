@@ -5,7 +5,7 @@
 
 // necesitamos retornar el html completo
 
-export const builtTweet = () => {
+export const builtTweet = (tweet) => {
     return `
     <span>${tweet.handler}</span>
     <span>${tweet.date}</span>
