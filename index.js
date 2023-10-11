@@ -35,7 +35,7 @@ hideTweetsButton.addEventListener('click', () => {
     tweetlist.classList.toggle('hidden'); // hidden es un nombre comun para la clase
 });
 /** LE DOY STiLo EN <style> del html
- * #tweet.hidden {
+ * #tweet.hidden {                      <-- fíjate que pongo almohadilla pq section es id=
  *      display: none; 
  * }
  */

@@ -7,21 +7,45 @@
  * Controlador: Es el nexo de unión entre el modelo y la vista.
  * Recibe las entradas del usuario a través de la vista y ejecuta la acción correspondiente en el modelo.
  * 
+ * Lo idela es que el controlador gestione sólo un nodo del DOM en este caso
+ * está gestionando la <section>
+ * 
  * en nuetro caso gestiona esta sección : <script type="module" src="./index.js"></script>
  * */
 
-import { tweets } from "./tweetListModel.js"; // importo para iterar la variable
-import { builtTweet } from "./tweetListView.js"; // importo vista en la function
+// import { tweets, getTweets } from "./tweetListModel.js"; // importo para iterar la variable
+// import { builtTweet } from "./tweetListView.js"; // importo vista en la function
+
+// // el controlador index.js ejecuta tweetlist
+// export const tweetListController = (tweetlist) => {
+
+//     tweets.forEach(tweet => {
+//         const tweetContainer = document.createElement('div'); 
+//         tweetContainer.classList.add('tweet'); // le añado la clase tweet paarq eu se aplique 
+
+//         tweetContainer.innerHTML = builtTweet(tweet);
+
+//         tweetlist.appendChild(tweetContainer)
+//     })
+// } 
+
+import { getTweets } from "./tweetListModel.js"; 
+import { builtTweet } from "./tweetListView.js"; 
 
 
-export const tweetListController = () => {
-    tweets.forEach(tweet => {
-        const tweetContainer = document.createElement('div'); 
-        tweetContainer.classList.add('tweet'); // le añado la clase tweet paarq eu se aplique 
+// el controlador index.js ejecuta tweetlist
+export const tweetListController = (tweetlist) => {
 
-        tweetContainer.innerHTML = builtTweet(tweet);
+    getTweets().then(tweets => {
 
-        const tweetlist = document.getElementById('tweets');
-        tweetlist.appendChild(tweetContainer)
+            tweets.forEach(tweet => {
+                const tweetContainer = document.createElement('div'); 
+                tweetContainer.classList.add('tweet'); // le añado la clase tweet paarq eu se aplique 
+        
+                tweetContainer.innerHTML = builtTweet(tweet);
+        
+                tweetlist.appendChild(tweetContainer)
+        })
     })
 } 
+
