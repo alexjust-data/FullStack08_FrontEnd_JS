@@ -1,5 +1,10 @@
 
-// 1. modelo de datos con los tweets (conjunto de tweets que voy a escribir por pantalla)
+/***
+ * MODELO
+ * 
+ * 1. modelo de datos con los tweets (conjunto de tweets que voy a escribir por pantalla)
+ */
+
 const tweets = [{
     handler: "@usuario1",
     date: new Date().toISOString(),
@@ -25,21 +30,28 @@ const tweets = [{
     likes: 400,
 }];
 
+
+/**
+ * CONTROLADOR
+ */
+
 // 2. recorrer el array de tweets
-// for (const tweet of tweets){}
 tweets.forEach(tweet => {
 
     // 3. crear estructura html para datos de cada tweet
 
-    // creo contenedor padre
-    const tweetContainer = document.createElement('div'); 
+    const tweetContainer = document.createElement('div');   // creo contenedor padre
+
     // relleno contenedor con 4 hijos
-    tweetContainer.innerHTML = `                          
+    tweetContainer.innerHTML = 
+    /**
+     * VISTA
+     */
+    `                       
         <span>${tweet.handler}</span>
         <span>${tweet.date}</span>
         <p>${tweet.message}</p>
-        <p>${tweet.likes}</p>
-    `;
+        <p>${tweet.likes}</p>`;
 
     // 4. añadimos al arbol DOM
     const tweetlist = document.getElementById('tweets');
