@@ -53,15 +53,19 @@ const transforTweets = (tweets) => {
     }))
 } 
 
-export const getTweets = () => {
-    const url = "https://fake-tweets-api-kc.vercel.app/posts";
 
-    return new Promise((resolve, reject) => {
-        fetch(url)
-            .then(response => response.json())
-            .then(tweets => {
-                const parseTweets = transforTweets(tweets)
-                resolve(parseTweets)
-            })
-    });
+/**
+ * Cuando tengas dudas de donde se coloca el async::
+ * siempre se coloca en la función más práxima al await:: 
+ */
+
+// función asincrónica async indica que la función maneja promesas con await.
+export const getTweets = async () => {
+    const url = "https://fake-tweets-api-kc.vercel.app/posts";
+    const response = await fetch(url);    // Usando fetch(), estamos solicitando datos de la URL previamente definida.
+                                          // Dado que fetch devuelve una promesa, uso await para esperar que se resuelva la promesa
+    const tweets = await response.json(); // Convertimos promea a objeto JavaScript
+                                          // .json() devuelve una promesa, así que usamos await para esperar a que se complete la conversión.
+    const parseTweets = transforTweets(tweets); // transformamos los tweets
+    return parseTweets;
 }

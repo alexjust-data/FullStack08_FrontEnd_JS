@@ -34,18 +34,17 @@ import { builtTweet } from "./tweetListView.js";
 
 
 // el controlador index.js ejecuta tweetlist
-export const tweetListController = (tweetlist) => {
+export const tweetListController = async (tweetlist) => {
 
-    getTweets().then(tweets => {
+    const tweets = await getTweets();
 
-            tweets.forEach(tweet => {
-                const tweetContainer = document.createElement('div'); 
-                tweetContainer.classList.add('tweet'); // le añado la clase tweet paarq eu se aplique 
-        
-                tweetContainer.innerHTML = builtTweet(tweet);
-        
-                tweetlist.appendChild(tweetContainer)
-        })
+    tweets.forEach(tweet => {
+        const tweetContainer = document.createElement('div'); 
+        tweetContainer.classList.add('tweet'); // le añado la clase tweet paarq eu se aplique 
+
+        tweetContainer.innerHTML = builtTweet(tweet);
+
+        tweetlist.appendChild(tweetContainer)
     })
 } 
 
