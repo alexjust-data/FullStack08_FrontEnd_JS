@@ -19,7 +19,7 @@ npm start
 
 By default, it will boot the server on port 8000, so it can be accessed via http://127.0.0.1:8000/
 
-This REST API exposes the following endpoints:
+**This REST API exposes the following endpoints:**
 
 >**POST /auth/register**: allows you to register a user. Receives as parameters username and password and returns whether or not the user could be registered (it does not allow users with the same username in the system).
 >
