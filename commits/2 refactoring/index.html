@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tweeter Clone</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            background-color: #1da1f2;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .tweet {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            background-color: #fff;
+        }
+
+        .tweet p {
+            margin: 0;
+        }
+
+        .tweet img {
+            width: 80px;
+        }
+
+        #tweets.hidden {
+            display: none; 
+        }
+
+        .notification{
+            font-weight: bold;
+            border: solid gray;
+            border-radius: 3px;
+            position: absolute;
+            top: 25px;
+            left: 20px;
+            padding: 2px;
+        }
+
+        .notification.success{
+            background-color: greenyellow;
+        }
+
+        .notification.error{
+            background-color: red;
+        }
+
+    </style>
+
+</head>
+<body>
+    <h1>Tweeter Clone</h1>
+    <section id="notifications"></section>
+
+    <button id="loadTweets">Cargar tweets</button>
+    <button id="removeTweets">Eliminar tweets</button>
+    <button id="hideTweets">Esconder/mostrar tweets</button>
+    <section id="tweets"></section>
+    
+    <script type="module" src="./index.js"></script>
+</body>
+</html>
