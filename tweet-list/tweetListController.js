@@ -30,7 +30,7 @@
 // } 
 
 import { getTweets } from "./tweetListModel.js"; 
-import { builtTweet } from "./tweetListView.js"; 
+import { builtTweet, emptyTweets } from "./tweetListView.js"; 
 
 
 // el controlador index.js ejecuta tweetlist
@@ -38,13 +38,20 @@ export const tweetListController = async (tweetlist) => {
 
     const tweets = await getTweets();
 
-    tweets.forEach(tweet => {
-        const tweetContainer = document.createElement('div'); 
-        tweetContainer.classList.add('tweet'); // le añado la clase tweet paarq eu se aplique 
+    if (tweets.length === 0){
+        window.alert("No hay tweets");
+        tweetlist.innerHTML = emptyTweets();
+    } else {
+        tweets.forEach(tweet => {
+            const tweetContainer = document.createElement('div'); 
+            tweetContainer.classList.add('tweet'); // le añado la clase tweet paarq eu se aplique 
+    
+            tweetContainer.innerHTML = builtTweet(tweet);
+    
+            tweetlist.appendChild(tweetContainer)
+        })
+    } 
 
-        tweetContainer.innerHTML = builtTweet(tweet);
+}
 
-        tweetlist.appendChild(tweetContainer)
-    })
-} 
 

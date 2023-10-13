@@ -42,7 +42,7 @@ export const tweets = [{
  */
 
 // transformamos la info que nos llega de la api
-const transforTweets = (tweets) => {
+const transformTweets = (tweets) => {
     return tweets.map(tweet => ({
         // datos de la vista
         handler : tweet.autor,
@@ -61,11 +61,19 @@ const transforTweets = (tweets) => {
 
 // función asincrónica async indica que la función maneja promesas con await.
 export const getTweets = async () => {
-    const url = "https://fake-tweets-api-kc.vercel.app/posts";
-    const response = await fetch(url);    // Usando fetch(), estamos solicitando datos de la URL previamente definida.
-                                          // Dado que fetch devuelve una promesa, uso await para esperar que se resuelva la promesa
-    const tweets = await response.json(); // Convertimos promea a objeto JavaScript
-                                          // .json() devuelve una promesa, así que usamos await para esperar a que se complete la conversión.
-    const parseTweets = transforTweets(tweets); // transformamos los tweets
-    return parseTweets;
+    const url = "https://fake-twees-api-kc.vercel.app/posts";
+    let parsedTweets = [];  // Inicializa parsedTweets
+
+    try {
+        const response = await fetch(url);    
+        const tweets = await response.json(); 
+        parsedTweets = transformTweets(tweets);  // Usa parsedTweets y transformTweets
+    
+    } catch (error) {
+        console.log('algo malo ocurrió:', error);  // Puedes agregar el error para tener más detalles
+        //return null;  // Devuelve null en caso de error (o maneja el error como prefieras)
+    }
+    
+    return parsedTweets;  // Devuelve parsedTweets que ahora está definido en el ámbito de la función.
 }
+
