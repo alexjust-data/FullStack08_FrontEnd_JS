@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<!-- 
+    Hemos de aprender a ver cuando el html 
+    - se presenta por defecto [html statico que no dependemos de la respuesta del servidor]
+    - cuando se pinta de forma condicional [un html que se genera como consecuencia de ciertas acciones]
+    ejemplos: los tweets que se pintan por pantalla no puede ser un html que se pinta por defecto porque es
+    la consecuencia de consumir un END POINT y que nos de una cierta respuesta. Es un html que vamos 
+    a escribir en tiempo de ejecución una vez los tweets hayan sido devueltos del api y nosotros 
+    mezclemos los datos que devuelve el api y lo mezclemos con un pequeño template. Es decir cuando 
+    recibimos los teets los mezclamos con un pequeño html y lo enganchamos al DOMEn este caso lo 
+    pintamos "bajo demanda".
+    - en el caso de la página signup el usuario se meterá y verá algo estático, simplemente un html plano que
+    tendrá su controlador pero la parte de la vista no será dinámica sino que será estática
+--> 
+<body>
+    <form id="signup">
+        <!-- validaciones : lo más facil lo haríamos aquí y lo más complicado de validar se hace en js:
+                            - type="email" me ayuda en algo
+                            - required : campo requerido
+                            - minlength="6" como mínimo caracteres 
+                            todo lo demás lo picaremos en el controlador signupController.js-->
+        <label for="email">Email:</label>
+        <input  id="email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password"  required minlength="6">
+
+
+        <label for="password-confirm">Repita contraseña:</label>
+        <input type="password" id="password-confirmation" required>
+
+        <!--este type="submit" propagará el evento llamado submit del formulario al padre que es form y disparará su evento submit-->
+        <button type="submit">Crear usuario</button>
+    </form>
+
+    <script type="module" src="./signup/index.js"></script>
+
+
+</body>
+</html>
