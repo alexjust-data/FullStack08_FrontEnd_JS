@@ -20,7 +20,7 @@ export const signupController = (signupForm) => {
  * @param {Event} event - Evento submit del formulario.
  * @param {HTMLFormElement} signupForm - Formulario a validar.
  */
-const validateForm = (event, signupForm) => {
+const validateForm = async (event, signupForm) => {
     event.preventDefault();
 
     const email = signupForm.querySelector('#email');
@@ -28,7 +28,18 @@ const validateForm = (event, signupForm) => {
     const passwordConfirmation = signupForm.querySelector('#password-confirmation');
     
     if (isFormValid(email, password, passwordConfirmation)){
-        createUser(email.value, password.value);  // Asumiendo que esta función está definida en alguna parte.
+        try {
+            await createUser(email.value, password.value);  // Asumiendo que esta función está definida en alguna parte.
+            dispatchEvent('userCreated', {
+                type: "error",
+                message: 'Usuario creado correctamente',
+            }, signupForm)
+        } catch (error) {
+            dispatchEvent('userCreated', {
+                type: "error",
+                message: error,
+            }, signupForm)
+        }
     }
 }
 
@@ -71,4 +82,13 @@ const isPasswordValid = (password, passwordConfirmation) => {
        return false;
    }
    return true;
+}
+
+
+const dispatchEvent = (eventName, data, signupForm) => {
+    const event = new CustomEvent(eventName, {
+        detail: data
+    });
+
+    signupForm.dispatchEvent(event);
 }

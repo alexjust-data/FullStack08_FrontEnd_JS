@@ -7,8 +7,6 @@
  * 
  * @returns {string} Una cadena en HTML representando la notificación con estilo.
  * 
- * @example
- * 
  * // Devuelve: '<div class="notification success"><p>¡Operación exitosa!</p></div>'
  * buildNotification('Tweets cargados correctamente', 'success');
  * 
@@ -18,9 +16,9 @@
  */
 export const buildNotification = (message, type) => {
     return `
-    <div class="notification ${type}">
+      <div class="notification ${type}">
         <p>${message}</p>
-    </div>    
+      </div>
     `
-}
+  }
 

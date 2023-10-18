@@ -1,18 +1,27 @@
 
 import { tweetListController } from "./tweet-list/tweetListController.js";
-import { notificationController } from "./notifications/notificationsControler.js";
+import { notificationsController } from "./notifications/notificationsController.js";
 
 
 const notifications = document.getElementById('notifications');
-const showNotification = notificationController(notifications);
+const showNotification = notificationsController(notifications);
 
 document.addEventListener('DOMContentLoaded', () => {
-    const tweetlist = document.getElementById('tweets');
-    tweetListController(tweetlist);
+    const tweetList = document.getElementById('tweets');
 
-    tweetlist.addEventListener('tweetsLoaded', (event) => {
-        showNotification(event.detail.message, event.detail.type);
-    });
+    
+    tweetList.addEventListener('tweetsLoaded', (event) => {
+        showNotification(event.detail.message, event.detail.type)
+      })
+      tweetList.addEventListener('startLoadingTweets', () => {
+        show();
+      })
+      tweetList.addEventListener('finishLoadingTweets', () => {
+        hide();
+      })
+
+    tweetListController(tweetList);
+
 })
 
 window.addEventListener('offline', () => {

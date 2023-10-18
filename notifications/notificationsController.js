@@ -8,8 +8,10 @@
  * @see {@link ./notificationView.js}
  */
 
+
 // Importa la función encargada de construir la estructura HTML de la notificación.
 import { buildNotification } from "./notificationView.js";
+
 
 /**
  * Crea y devuelve una función para mostrar una notificación.
@@ -24,7 +26,7 @@ import { buildNotification } from "./notificationView.js";
  * const notificar = notificationController(elementoDOM);
  * notificar("Datos cargados exitosamente", "exito");
  */
-export const notificationController = (notifications) => {
+export const notificationsController = (notifications) => {
     
     /**
      * Muestra un mensaje de notificación al usuario.
@@ -44,8 +46,8 @@ export const notificationController = (notifications) => {
         
         // Después de un retraso (3 segundos por defecto), borra la notificación.
         setTimeout(() => {
-            notifications.innerHTML = "";
-        }, 3000);
+            notifications.innerHTML = '';
+          }, 3000);
     }
 
     // Devuelve la función creada.

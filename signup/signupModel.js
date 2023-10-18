@@ -1,13 +1,3 @@
-/**
- * Sparrest que es nuestra BBDD recibirá:
- * Register a user with POST /auth/register { username: "luke", password: "skywalker" }
- * 
- * "Modelo" : el modelo es la "M" en MVC y se ocupa de todo lo relacionado con los datos y la lógica de negocio. 
- * La "Vista" (View) se encarga de mostrar la información al usuario y recoger sus entradas, 
- * "Controlador" (Controller) actúa como intermediario, tomando entradas de la vista, procesándolas a través del 
- * modelo y luego actualizando la vista en consecuencia.
- */
-
 
 
 /**
@@ -15,38 +5,67 @@
  * La función envía una solicitud POST a la API de autenticación
  * para registrar un nuevo usuario utilizando su correo electrónico y contraseña.
  *
- * @param {string} email - Dirección de correo electrónico del nuevo usuario.
- * @param {string} password - Contraseña del nuevo usuario.
- * @returns {Promise<void>} - No devuelve nada, pero es una función asincrónica 
- *                            por lo que devuelve una promesa.
+ * @param {string} email - El email del usuario.
+ * @param {string} password - La contraseña del usuario.
+ * @returns {object} - Retorna el objeto de respuesta del servidor o lanza un error.
  */
 export const createUser = async(email, password) => {
-    // URL de la API endpoint donde se registra un nuevo usuario.
-    const url = "http://localhost:8000/auth/register"
+    // URL del endpoint al que se hará la petición.
+    const url = "http://localhost:8000/auth/register";
 
-    // Preparación del cuerpo de la solicitud. 
-    // La estructura del objeto body está diseñada para ser compatible con la expectativa de la API.
+    /** Construcción del cuerpo de la petición POST.
+     * piensa que en db.json de la BD hay esta estructura:
+     * { "users": [{"username":     , "password":     }]
+     */
     const body = {
-        username: email,
-        password: password
-    }
+        username: email, // le pasamos nuestra variable body
+        password: password  // le pasamos nuestra variable password
+    };
 
-    // Envío de la solicitud HTTP POST a la API utilizando fetch.
-    // Se envían los datos del usuario en formato JSON y se especifica en los encabezados que el contenido es JSON.
-    const response = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(body), // El objeto body debe ser convertido a una cadena JSON.
-        headers: {
-            'content-type': 'application/json'
+    try {
+        // Realiza una petición POST (enviar/postear) asincrónica al servidor.
+        const response = await fetch(url, {
+            method: 'POST',
+            // Convierte el cuerpo de la petición a formato JSON.
+            body: JSON.stringify(body),
+            headers: { // colección de encabezados, lee doc de BD que estamos usando https://github.com/kasappeal/sparrest.js
+                'content-type': 'application/json', //  Este encabezado informa al servidor que el cuerpo de la petición está en formato JSON
+            }
+        });
+
+        // Verifica si la respuesta es exitosa (códigos 200-299).
+        if (!response.ok) {
+            // Intenta parsear la respuesta en caso de que contenga detalles adicionales sobre el error.
+            // Si el parseo falla (por ejemplo, si la respuesta no es JSON), usa el texto de estado como mensaje de error.
+            const responseData = await response.json().catch(() => ({ error: response.statusText }));
+            // Lanza un error personalizado con el mensaje obtenido.
+            throw new Error(responseData.message || "Error desconocido"); // .message porque he visto que aquí lo devolvía inspeccionando en network/register/response
         }
-    })
 
-    // Extrae y parsea el cuerpo de la respuesta en formato JSON.
-    // Dependiendo de la implementación de la API, podría contener detalles del usuario creado,
-    // un token de autenticación, mensajes de error, etc.
-    const data = await response.json();
+        /** Parsea y retorna la respuesta JSON del servidor. ¿qué tipo de mensaje?
+         * depende del servidor y de la API con la que estés interactuando, por ejemplo:
+         * { "success": true, "message": "Usuario registrado con éxito.", "userId": 12345 }
+         */
+        const data = await response.json();
+        return data;
 
-    // Nota: En esta función, después de parsear la respuesta, no se hace nada con los datos.
-    // Dependiendo de las necesidades, podrías querer devolver estos datos, manejar errores 
-    // basados en el código de respuesta HTTP, entre otros.
+    } catch (error) {
+        // Registra el error en la consola.
+        console.error('Error al crear el usuario:', error);
+        
+        // Propaga el mensaje de error para ser manejado por quien llame a esta función.
+        if (error.message) {
+            throw error.message;
+            /**
+             * En JavaScript, muchos objetos de error nativos (como TypeError, ReferenceError, etc.) 
+             * tienen una propiedad message que contiene una descripción legible del error. 
+             */
+        } else {
+            throw error;
+            /**
+             * Puede haber situaciones en las que el error sea simplemente una cadena o incluso otro tipo de objeto. 
+             * En ese caso, el código lanza (o re-lanza) el error tal cual fue capturado.
+             */
+        }
+    }
 }
