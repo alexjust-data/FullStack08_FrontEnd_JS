@@ -22,9 +22,11 @@ export const createUser = async(email, password) => {
         password: password  // le pasamos nuestra variable password
     };
 
+    let response;
+
     try {
         // Realiza una petición POST (enviar/postear) asincrónica al servidor.
-        const response = await fetch(url, {
+        response = await fetch(url, {
             method: 'POST',
             // Convierte el cuerpo de la petición a formato JSON.
             body: JSON.stringify(body),
@@ -37,22 +39,11 @@ export const createUser = async(email, password) => {
         if (!response.ok) {
             // Intenta parsear la respuesta en caso de que contenga detalles adicionales sobre el error.
             // Si el parseo falla (por ejemplo, si la respuesta no es JSON), usa el texto de estado como mensaje de error.
-            const responseData = await response.json().catch(() => ({ error: response.statusText }));
+            const responseData = await response.json();
             // Lanza un error personalizado con el mensaje obtenido.
-            throw new Error(responseData.message || "Error desconocido"); // .message porque he visto que aquí lo devolvía inspeccionando en network/register/response
+            throw new Error(responseData.message); // .message porque he visto que aquí lo devolvía inspeccionando en network/register/response
         }
-
-        /** Parsea y retorna la respuesta JSON del servidor. ¿qué tipo de mensaje?
-         * depende del servidor y de la API con la que estés interactuando, por ejemplo:
-         * { "success": true, "message": "Usuario registrado con éxito.", "userId": 12345 }
-         */
-        const data = await response.json();
-        return data;
-
     } catch (error) {
-        // Registra el error en la consola.
-        console.error('Error al crear el usuario:', error);
-        
         // Propaga el mensaje de error para ser manejado por quien llame a esta función.
         if (error.message) {
             throw error.message;

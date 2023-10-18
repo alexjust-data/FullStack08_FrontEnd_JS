@@ -22,26 +22,27 @@ export const signupController = (signupForm) => {
  */
 const validateForm = async (event, signupForm) => {
     event.preventDefault();
-
+  
     const email = signupForm.querySelector('#email');
     const password = signupForm.querySelector('#password');
     const passwordConfirmation = signupForm.querySelector('#password-confirmation');
-    
-    if (isFormValid(email, password, passwordConfirmation)){
-        try {
-            await createUser(email.value, password.value);  // Asumiendo que esta función está definida en alguna parte.
-            dispatchEvent('userCreated', {
-                type: "error",
-                message: 'Usuario creado correctamente',
-            }, signupForm)
-        } catch (error) {
-            dispatchEvent('userCreated', {
-                type: "error",
-                message: error,
-            }, signupForm)
-        }
+  
+    try {
+      if (isFormValid(email, password, passwordConfirmation)) {
+        await createUser(email.value, password.value);
+        dispatchEvent('userCreated', {
+          type: "success",
+          message: 'Usuario creado correctamente',
+        }, signupForm)
+        window.location = './login.html';
+      }
+    } catch (error) {
+      dispatchEvent('userCreated', {
+        type: "error",
+        message: error,
+      }, signupForm)
     }
-}
+  }
 
 /**
  * Comprueba si los campos del formulario son válidos.
@@ -51,10 +52,10 @@ const validateForm = async (event, signupForm) => {
 * @returns {boolean} - Verdadero si ambos campos son válidos, falso de lo contrario.
 */
 const isFormValid = (email, password, passwordConfirmation) => {
-    const emailValidation = isEmailValid(email);
+    const emailValidation =  isEmailValid(email);
     const passwordValidation = isPasswordValid(password, passwordConfirmation);
-   return emailValidation && passwordValidation;
-}
+    return emailValidation && passwordValidation;
+  }
 
 /**
 * Comprueba si el correo electrónico es válido.
@@ -62,13 +63,15 @@ const isFormValid = (email, password, passwordConfirmation) => {
 * @returns {boolean} - Verdadero si el correo es válido, falso de lo contrario.
 */
 const isEmailValid = (email) => {
-   const emailRegExp = new RegExp(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
-   if (!emailRegExp.test(email.value)) {
-       alert('El email no es correcto');
-       return false;
-   }
-   return true;
-}
+    const emailRegExp = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
+    let result = true;
+  
+    if (!emailRegExp.test(email.value)) {
+      throw 'El email no es correcto';
+    }
+  
+    return result;
+  }
 
 /**
 * Comprueba si las contraseñas ingresadas coinciden.
@@ -77,18 +80,20 @@ const isEmailValid = (email) => {
 * @returns {boolean} - Verdadero si las contraseñas coinciden, falso de lo contrario.
 */
 const isPasswordValid = (password, passwordConfirmation) => {
-   if (password.value !== passwordConfirmation.value) {
-       alert('Las contraseñas no son iguales');
-       return false;
-   }
-   return true;
-}
+    let result = true;
+  
+    if (password.value !== passwordConfirmation.value) {
+      throw 'las contraseñas no son iguales';
+    }
+  
+    return result;
+  }
 
 
 const dispatchEvent = (eventName, data, signupForm) => {
     const event = new CustomEvent(eventName, {
-        detail: data
+      detail: data
     });
-
+  
     signupForm.dispatchEvent(event);
-}
+  }
