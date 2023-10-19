@@ -45,7 +45,9 @@ Ya tenemos un pequeño esquema de lo que haremos. ¿qué hace el controlador ?
 
 
 - Cuando te has registrado la página te tiene que llevar a login.
-- ¿en qué momento vamos a la pantalla del login? cuando nos enteramos que el usuario tiene el ok, cambiamos del pantalla `window.location`
+  
+- ¿en qué momento vamos a la pantalla del login? cuando nos enteramos que el usuario tiene el ok, le cambiamos pantalla `window.location`
+  
 - Cuando el usuario se ha logeado, ¿pq tiene que ver de nuevo los botones login - singup? vamosa crear una pieza de código donde cuando el user se ha registrado la página le muestra otra cosa: "hola user, cómo estas?"  . Ya no tendríamos esto
 ```sh
         <nav>
@@ -57,4 +59,8 @@ Ya tenemos un pequeño esquema de lo que haremos. ¿qué hace el controlador ?
             </ul>
         </nav>
 ```
-en el html index inicial, ahora creamos carpeta **session**
+en el html index inicial con la linea  <!-- <script type="module" src="./index.js"></script>
+        el código JavaScript en index.js podrá interactuar con los elementos 
+        que están dentro del <body> (como <h1>, <nav>, <section>, etc.) una 
+            vez que la página ha sido cargada en el navegador.-->, 
+ahora creamos carpeta **session** y desde allí crearemos los dos archivos vista y controlador. Suigue con el readme.md de ./session/
