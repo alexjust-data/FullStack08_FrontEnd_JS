@@ -22,7 +22,7 @@ export const loginUser = async (email, password) => {
         throw new Error(data.message);
       }
       if (response.ok) {
-        return data.accessToken;
+        return data.accessToken; // devuelve loginUsaer() al controlador el token de usuario
       }
     } catch (error) {
       if (error.message) {
