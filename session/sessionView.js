@@ -10,6 +10,7 @@ export const buildUnauthorizedSession = () => {
 }
 
 // vista usuario SI ha iniciado sesion, botones de uso
+// se lo estamos añadiendo DINAMICAMENTE
 export const buildAuthenticatedSession = () => {
 return `
 <a href="./tweet-creation.html">Create tweet</a>

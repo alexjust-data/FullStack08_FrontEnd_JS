@@ -90,10 +90,21 @@ const isPasswordValid = (password, passwordConfirmation) => {
   }
 
 
+/**
+ * Función para despachar un evento personalizado en un formulario.
+ * 
+ * @param {string} eventName - Nombre del evento personalizado a despachar.
+ * @param {*} data - Datos o detalles que se quieran pasar con el evento.
+ * @param {HTMLElement} signupForm - Elemento del formulario al que se le despachará el evento.
+ */
 const dispatchEvent = (eventName, data, signupForm) => {
-    const event = new CustomEvent(eventName, {
-      detail: data
-    });
-  
-    signupForm.dispatchEvent(event);
-  }
+    
+  // Creación de un evento personalizado con el nombre y detalles proporcionados.
+  const event = new CustomEvent(eventName, {
+    detail: data
+  });
+
+  // Despachando (emitiendo) el evento personalizado en el formulario especificado.
+  signupForm.dispatchEvent(event);
+}
+
