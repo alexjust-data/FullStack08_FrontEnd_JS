@@ -41,7 +41,7 @@ Ya tenemos un pequeño esquema de lo que haremos. ¿qué hace el controlador ?
 
 ** notas **
 - El token jwt <!--const jwt = await loginUser(email, password);--> será el token que guardaremos para identificar al usuario siempre. Si creamos un tweets la app ha de saber quien es el usuario.
-- ¿Cuando creamos una variable en JS, ¿cuál es su tiempo de vida? Mientras la función deonde se haya definido esa variable siga en ejecución.
+- ¿Cuando creamos una variable en JS, ¿cuál es su tiempo de vida? Mientras la función deonde se haya definido esa variable siga en ejecución. https://jwt.io/
 
 
 - Cuando te has registrado la página te tiene que llevar a login.
