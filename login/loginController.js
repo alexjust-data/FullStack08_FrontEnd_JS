@@ -1,6 +1,6 @@
 
 
-
+import { dispatchEvent } from "../utils/dispatchEvent.js";
 import { loginUser } from "./loginModel.js";
 
 
@@ -25,16 +25,16 @@ export const loginController = (loginForm) => {
 const submitLogin = async (loginForm) => {
     const { email, password } = getLoginData(loginForm);  // Extract user credentials from the form
     try {
-        //dispatchEvent('startLoginUser', null, loginForm); // Dispatch an event indicating the start of the login process
+        dispatchEvent('startLoginUser', null, loginForm); // Dispatch an event indicating the start of the login process
         const jwt = await loginUser(email, password);     // Attempt to log the user in
         alert('login OK');                                // Notify the user of a successful login
         localStorage.setItem('token', jwt);               // Store the JWT token for future authenticated requests
         window.location = './index.html';                 // Redirect the user to the main page
     } catch (error) {
-        alert(error);   }                                  // Handle any login errors by notifying the user
-    // } finally {
-    //     dispatchEvent('finishLoginUser', null, loginForm);// Dispatch an event indicating the end of the login process
-    // }
+        alert(error);                                     // Handle any login errors by notifying the user
+    } finally {
+        dispatchEvent('finishLoginUser', null, loginForm);// Dispatch an event indicating the end of the login process
+    }
 }
 
 

@@ -15,19 +15,20 @@ const { show, hide } =  loaderController(loader); // nos devuleve un objeto con 
 document.addEventListener('DOMContentLoaded', () => {
     const tweetList = document.getElementById('tweets');
 
-    
+    // 1. primero escucho los eventos
     tweetList.addEventListener('tweetsLoaded', (event) => {
         showNotification(event.detail.message, event.detail.type)
-      })
+    })
     tweetList.addEventListener('startLoadingTweets', () => {
         //ejecuto el metido de carga de la ruleta
         show();
-      })
+    })
     tweetList.addEventListener('finishLoadingTweets', () => {
         // ejecuto el metodo de ocultacion
          hide();
-      })
+    })
 
+    // 2. luego ejecuto el controlador
     tweetListController(tweetList);
 
     const session = document.getElementById('session');

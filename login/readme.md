@@ -64,3 +64,45 @@ en el html index inicial con la linea  <!-- <script type="module" src="./index.j
         que están dentro del <body> (como <h1>, <nav>, <section>, etc.) una 
             vez que la página ha sido cargada en el navegador.-->, 
 ahora creamos carpeta **session** y desde allí crearemos los dos archivos vista y controlador. Suigue con el readme.md de ./session/
+
+
+
+
+**Ruleta de carga**
+
+1. abro index.js de login
+2. voy al loading.html e introduzco 
+
+```html
+<section id="loader"></section>
+```
+3. en indenx.js importo 
+```sh
+import { loaderController } from '../loader/loaderController.js';
+```
+4. añado escuchadores y cargo controlador del loader
+```sh
+  const loader = document.querySelector('#loader');
+  const { show, hide } = loaderController(loader);
+
+  loginForm.addEventListener('startLoginUser', () => {
+    show();
+  });
+  loginForm.addEventListener('finishLoginUser', () => {
+    hide();
+  });
+
+  loginController(loginForm);
+```
+
+5. loginController.js --> añado evento start y evento end en los try
+   
+```js
+try {
+    dispatchEvent('startLoginUser', null, loginForm);
+```
+
+6. Añade el css en html 
+```html
+<link rel="stylesheet" href="./loader/style.css" />
+```
