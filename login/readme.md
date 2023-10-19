@@ -42,3 +42,19 @@ Ya tenemos un pequeño esquema de lo que haremos. ¿qué hace el controlador ?
 ** notas **
 - El token jwt <!--const jwt = await loginUser(email, password);--> será el token que guardaremos para identificar al usuario siempre. Si creamos un tweets la app ha de saber quien es el usuario.
 - ¿Cuando creamos una variable en JS, ¿cuál es su tiempo de vida? Mientras la función deonde se haya definido esa variable siga en ejecución.
+
+
+- Cuando te has registrado la página te tiene que llevar a login.
+- ¿en qué momento vamos a la pantalla del login? cuando nos enteramos que el usuario tiene el ok, cambiamos del pantalla `window.location`
+- Cuando el usuario se ha logeado, ¿pq tiene que ver de nuevo los botones login - singup? vamosa crear una pieza de código donde cuando el user se ha registrado la página le muestra otra cosa: "hola user, cómo estas?"  . Ya no tendríamos esto
+```sh
+        <nav>
+            <ul>
+                <li>
+                    <a href="./login.html">Login</a>
+                    <a href="./signup.html">Signup</a>
+                </li>
+            </ul>
+        </nav>
+```
+en el html index inicial, ahora creamos carpeta **session**

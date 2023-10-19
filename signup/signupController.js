@@ -34,7 +34,7 @@ const validateForm = async (event, signupForm) => {
           type: "success",
           message: 'Usuario creado correctamente',
         }, signupForm)
-        //window.location = './login.html';
+        window.location = './login.html'; // cuando el usuario tiene el ok! lo enviamos a login Form
       }
     } catch (error) {
       dispatchEvent('userCreated', {
