@@ -30,7 +30,7 @@ Ya tenemos un pequeño esquema de lo que haremos. ¿qué hace el controlador ?
    - try{loginUser(email, password) alert('login OK')} catch(error) {alert(error)}
 
 
-** Conecto con Sparrest**
+**Conecto con Sparrest**
 1. creo fichero loginModel.js
 2. 
      - Obtener Referencias de Elementos : <!-- #login y #loader-->

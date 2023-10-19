@@ -1,3 +1,5 @@
+
+// vista usuario NO ha iniciado sesion
 export const buildUnauthorizedSession = () => {
     return `<ul>
     <li>
@@ -5,10 +7,11 @@ export const buildUnauthorizedSession = () => {
       <a href="./signup.html">Signup</a>
     </li>
   </ul>`;
-  }
-  
-  export const buildAuthenticatedSession = () => {
-    return `
-    <a href="./tweet-creation.html">Create tweet</a>
-    <button>Cerrar sesión</button>`;
-  }
+}
+
+// vista usuario SI ha iniciado sesion
+export const buildAuthenticatedSession = () => {
+return `
+<a href="./tweet-creation.html">Create tweet</a>
+<button>Cerrar sesión</button>`;
+}
