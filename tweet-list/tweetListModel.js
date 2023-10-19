@@ -49,7 +49,8 @@ const transformTweets = (tweets) => {
         date    : new Date().toISOString(),
         photo   : tweet.image,
         message : tweet.message,
-        likes   : tweet.likes.length
+        likes   : tweet.likes.length,
+        id      : tweet.id
     }))
 } 
 
