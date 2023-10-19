@@ -12,7 +12,6 @@ export const loginController = (loginForm) => {
      * el escuchador ejecuta el código que se le ha asignado.
      */
    loginForm.addEventListener('submit', (event) => {
-        
         event.preventDefault(); // permite acciones adicionales, antes envío predeterminado
     
         submitLogin(loginForm)  // validar y dar feedback : login <--> sparrest
