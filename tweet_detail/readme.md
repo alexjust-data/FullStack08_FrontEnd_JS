@@ -70,3 +70,107 @@ entonces vamos a tweetListMOdel.js y añadimos id:tweets.id
 ```
 
 tu cuando le pasas un tweet a un colega, tú lo que le pasas en la url en tener en cuenta que el local estará hecho es local a cada cliente local a cada navegador entonces yo no tendría posibilidad de pasarle la url del detalle de un tweet Si el tweet que tengo que pintar no va en la url
+
+Ahora vamos a montar la logica necesaria para ir a Sparrest
+
+CReamos TweetDetail/index.js
+
+ ese numerito es identificador que había una una clase de Javascript que nos ayudaba a ello que era Url Serge Parans y luego lo que tendríamos que hacer es ir a parres traernos los datos y pintar qué piezas se os ocurren que deberíamos tener aquí o sea queficheros como implementaríais? 
+
+
+ 1. pieza que reciba el id del tweet y devuelve los datos: Sparret tengo este id de tweet, dame los datos para escribirlo. - MODELO
+ 2. pieza que le mandamos los datos del tweet y nos devuelve el html necesario - VISTA
+ 3. pieza que renderizas ese html en la pantalla - CONTROLADOR
+
+
+https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
+
+si te vas a la consola de la inspeccion del browser un abres `window.location` verás 
+`href: http://127.0.0.1:5500/tweetDetail.html?id=1` y también veremos `search: "?id=1"` esto sería **window.location.search** = '?id=1'
+
+entonces si te pasamos `const params = new URLSerchParams(window.location.search)`
+que esto aquí lo encontrarías en https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams y donde me interesa esto `searchParams.get()` y le paso en nimbre de nuestro parámetro que es id `searchParams.get("id")` y esto me devuelve un **1**.
+
+Esun tratamiento sencillo para hacer la lectura. Entonces en index.js
+
+```js
+// sacamos el id del tweet
+document.addEventListener('DOMContentLoaded', () => {
+
+  const params = new URLSearchParams(window.location.search);
+  const tweetId = params.get("id");
+```
+si yo estoy leyendo Tweet Idi, y ese tuit dí es nulo.Hago una redirección. Me salgo de aquí porque ya algo va a ir mal. O sea, si yo entro una pantalla donde tengo que pintar un tuit y no sé qué twit tengo que pintar qué voy a hacer en esa pantalla, Vale, eso lo primero ahí tendríamos que controlar que tenemos que hacer una redirección
+
+
+or una parte, también otra respuesta válida : Empieza a crear el controlador y haz todo desde ahí. El traerte. Los datos del Tweet, crear la vista o pasarle los datos y pintarlo en pantalla. Así que es lo que vamos a hacer. Creo tweetDetailController.js 
+
+CReo en el html la linea
+```html
+<section id="tweetDetail"></section>
+```
+que será el contenedor de que va a pintar aqui
+
+```js
+// tweetDetailController.js
+export const tweetDetailController = (tweetDetail) => 
+```
+
+ahora voy a por ese nodo al DOM
+
+```js
+document.addEventListener('DOMContentLoaded', () => {
+  
+  // Utiliza URLSearchParams para obtener parámetros de la URL actual
+  const params = new URLSearchParams(window.location.search);
+  // Extrae el valor asociado con la clave "id" de los parámetros de la URL
+  const tweetId = params.get("id");
+
+  // Selecciona el elemento con el id 'tweetDetail' del documento
+  const tweetDetail = document.querySelector('#tweetDetail');
+  // Llama a la función tweetDetailController 
+  tweetDetailController(tweetDetail, tweetId);
+});
+
+```
+
+monto estructura en tweetDetallController.js
+
+```js
+export const tweetDetailController = async (tweetDetail, tweetId) => {
+    try {
+        const tweet = await getTweet(tweetId);
+        console.log(tweet);
+    } catch (error) {
+
+    }
+}
+```
+
+creamos tweetDetailModel.js y aquí no dependemos de ningún click ni dana se hace la acción y se ejecuta al controlador directamente
+
+```JS
+export const getTweet = async (tweetId) => {
+    const url = `http://localhost:8000/api/tweets/${tweetId}`;
+
+    const response = await fetch(url);
+    const tweet = await response.json();
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
