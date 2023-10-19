@@ -5,12 +5,12 @@ Este Readme define el proceso que he llevado a cabo para construir el codigo. Ca
 ---
 
 
-** Creamos html template **
+**Creamos html template**
 1. añado linea final del body <!-- <script type="module" src="./login/index.js"></script> -->
 2. ¿estático o dinámico? es algo que deberíamos cargar en tiempo de ejecución de JS o es un html que va a estar ahí por defecto. 
 3. Estático. Pues creamos el <!-- <form id="login"> -->
 
-** CREAMOS CARPETA LOGIN **
+**CREAMOS CARPETA LOGIN**
 1. creo index.js --> cargo el DOM con 'DOMContentLoaded' y cargado con la función hacemos cositas:
 2. recibo html del Formulario de inicio de sesion <!-- const loginForm = document.querySelector('#login'); -->
 3. creo loginController.js porque en index.js debo 
@@ -39,7 +39,7 @@ Ya tenemos un pequeño esquema de lo que haremos. ¿qué hace el controlador ?
      - Inicializar Controlador de Inicio de Sesión : pasando el formulario de inicio de sesión (loginForm)
 
 
-** notas **
+**notas**
 - El token jwt <!--const jwt = await loginUser(email, password);--> será el token que guardaremos para identificar al usuario siempre. Si creamos un tweets la app ha de saber quien es el usuario.
 - ¿Cuando creamos una variable en JS, ¿cuál es su tiempo de vida? Mientras la función deonde se haya definido esa variable siga en ejecución. https://jwt.io/
 
