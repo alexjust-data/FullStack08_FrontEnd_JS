@@ -42,17 +42,27 @@ export const tweets = [{
  */
 
 // transformamos la info que nos llega de la api
+// const transformTweets = (tweets) => {
+//     return tweets.map(tweet => ({
+//         // datos de la vista
+//         handler : tweet.author,
+//         date    : new Date().toISOString(),
+//         message : tweet.message,
+//         likes   : tweet.likes.length,
+//         photo   : tweet.image,
+//         id      : tweet.id
+//     }))
+// } 
+
+// transformamos la info que nos llega de la api
 const transformTweets = (tweets) => {
     return tweets.map(tweet => ({
-        // datos de la vista
-        handler : tweet.author,
-        date    : new Date().toISOString(),
-        message : tweet.message,
-        likes   : tweet.likes.length,
-        photo   : tweet.image,
-        id      : tweet.id
+      handler: tweet.user.username,
+      date: new Date().toISOString(),
+      message: tweet.message,
+      id: tweet.id
     }))
-} 
+  }
 
 
 /**
@@ -62,7 +72,7 @@ const transformTweets = (tweets) => {
 
 // función asincrónica async indica que la función maneja promesas con await.
 export const getTweets = async () => {
-    const url = "http://127.0.0.1:8000/api/tweets";
+    const url = "http://127.0.0.1:8000/api/tweets?_expand=user";
     let parsedTweets = [];  // Inicializa parsedTweets
 
     try {

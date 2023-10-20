@@ -44,7 +44,7 @@ export const tweetListController = async (tweetList) => {
 
     // Si no hay tweets, mostramos un mensaje. De lo contrario, renderizamos los tweets y emitimos un evento de éxito.
     if (tweets.length === 0){
-        tweetlist.innerHTML = emptyTweets();
+        tweetList.innerHTML = emptyTweets();
     } else {
         renderTweets(tweets, tweetList);
         const event = createCustomEvent('success', 'Tweets cargados correctamente');
