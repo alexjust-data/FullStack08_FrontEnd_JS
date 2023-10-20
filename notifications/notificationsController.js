@@ -13,8 +13,7 @@
 import { buildNotification } from "./notificationView.js";
 
 
-/**
- * Crea y devuelve una función para mostrar una notificación.
+/** Crea y devuelve una función para mostrar una notificación.
  * 
  * Esta función, cuando se invoca, mostrará un mensaje de notificación
  * al usuario y lo eliminará automáticamente después de un corto período de tiempo.
@@ -28,8 +27,7 @@ import { buildNotification } from "./notificationView.js";
  */
 export const notificationsController = (notifications) => {
     
-    /**
-     * Muestra un mensaje de notificación al usuario.
+    /** Muestra un mensaje de notificación al usuario.
      * 
      * Después de mostrar la notificación, esta será eliminada automáticamente
      * tras un periodo de tiempo (por defecto son 3 segundos).

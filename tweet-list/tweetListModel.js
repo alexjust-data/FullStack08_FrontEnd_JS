@@ -45,11 +45,11 @@ export const tweets = [{
 const transformTweets = (tweets) => {
     return tweets.map(tweet => ({
         // datos de la vista
-        handler : tweet.handler,
+        handler : tweet.author,
         date    : new Date().toISOString(),
-        photo   : tweet.image,
         message : tweet.message,
         likes   : tweet.likes.length,
+        photo   : tweet.image,
         id      : tweet.id
     }))
 } 

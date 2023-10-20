@@ -11,7 +11,6 @@ Vamos a utilizar la opción del link, sobre todo por temas de Seo. Los navegador
 Entonces vamos a tirar por la opción: de convertir nuestros tweets en links vale visualmente van a seguir siendo iguales, ok pero van a ser links entonces teniendo en cuenta quequeremos convertir nuestros tweets, cada 1 de ellos en un link, ¿Qué haríais?
 
 1. vamos a tweetList/tweetListView.js y donde ponía:
-
 ```js
     return `
     <span>${tweet.handler}</span>
@@ -22,7 +21,6 @@ Entonces vamos a tirar por la opción: de convertir nuestros tweets en links val
 ```
 
 ahora pondrá
-
 ```js
     return `
     <a herf="">
@@ -41,7 +39,6 @@ Cuando haga click se irá a una pantalla nueva, entonces creo un html nuevo `twe
 
 
 Cuado queramos cargar la página del tweet detalle tendrmeos que ir a buscar el `?id="id del tweet"` y esto lo conseguiremos diciéndole 
-
 ```js
     return `
     <a href="./tweetDetail.html?id=${tweet.id}">
@@ -52,6 +49,7 @@ Cuado queramos cargar la página del tweet detalle tendrmeos que ir a buscar el 
         <p>${tweet.likes}</p>
     </a>`
 ```
+
 sabiendo que esto será dinamico hay que meterle el identificador del tweet que sea. ¿estamos mapeando los id cuando vienen de la BD de Sparrest? NO
 el navegador nos devuelve
 ```sh
@@ -91,8 +89,7 @@ si te vas a la consola de la inspeccion del browser un abres `window.location` v
 entonces si te pasamos `const params = new URLSerchParams(window.location.search)`
 que esto aquí lo encontrarías en https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams y donde me interesa esto `searchParams.get()` y le paso en nimbre de nuestro parámetro que es id `searchParams.get("id")` y esto me devuelve un **1**.
 
-Esun tratamiento sencillo para hacer la lectura. Entonces en index.js
-
+Es un tratamiento sencillo para hacer la lectura. Entonces en index.js
 ```js
 // sacamos el id del tweet
 document.addEventListener('DOMContentLoaded', () => {
@@ -109,15 +106,14 @@ CReo en el html la linea
 ```html
 <section id="tweetDetail"></section>
 ```
-que será el contenedor de que va a pintar aqui
 
+que será el contenedor de que va a pintar aqui
 ```js
 // tweetDetailController.js
 export const tweetDetailController = (tweetDetail) => 
 ```
 
 ahora voy a por ese nodo al DOM
-
 ```js
 document.addEventListener('DOMContentLoaded', () => {
   
@@ -135,7 +131,6 @@ document.addEventListener('DOMContentLoaded', () => {
 ```
 
 monto estructura en tweetDetallController.js
-
 ```js
 export const tweetDetailController = async (tweetDetail, tweetId) => {
     try {
@@ -148,7 +143,6 @@ export const tweetDetailController = async (tweetDetail, tweetId) => {
 ```
 
 creamos tweetDetailModel.js y aquí no dependemos de ningún click ni dana se hace la acción y se ejecuta al controlador directamente
-
 ```JS
 export const getTweet = async (tweetId) => {
     const url = `http://localhost:8000/api/tweets/${tweetId}`;
@@ -157,6 +151,232 @@ export const getTweet = async (tweetId) => {
     const tweet = await response.json();
 }
 ```
+
+
+Comprovamos que funcione en ebrowser
+
+Creo una función parseTweet en el modelo para pintar los tweets en el detalle a partir de BD Sparrest
+```js
+const parseTweet = (tweet) => {
+    return {
+      handler: tweet.user.username,
+      photo: tweet.image
+      message: tweet.message,
+      likes: [],
+      userId: tweet.user.id,
+      id: tweet.id
+    }
+}
+
+export const getTweet = async (tweetId) => {
+    const url = `http://localhost:8000/api/tweets/${tweetId}`;
+
+    const response = await fetch(url);
+    const tweet = await response.json();
+
+    // modifico la funcion para capturar error
+    try {
+        const response = await fetch(url);
+        if (response.ok) {
+          const data = await response.json();
+          return data;
+        } else {
+          const message = data.message || 'Ha ocurrido un error';
+          throw new Error(message);
+        }
+      } catch (error) {
+        throw error.message;
+      }
+}
+```
+
+le añado al controlador el alert
+
+```js
+export const tweetDetailController = async (tweetDetail, tweetId) => {
+
+    try {
+        const tweet = await getTweet(tweetId);
+        console.log(tweet);
+    } catch (error) {
+        alert(error)
+    }
+}
+```
+
+Creo la VISTA tweetDetailView.js
+```js
+// Exporta una función que construye la estructura HTML de un tweet
+export const buildTweet = (tweet) => {
+
+    // Define la estructura base del tweet con su nombre de usuario (handler) y su mensaje
+    let tweetTemplate = `
+        <span>${tweet.handler}</span>
+        <img src="${tweet.photo}" alt="tweet image">
+        <p>${tweet.message}</p>
+    `;
+  
+    // Si el tweet tiene likes (es decir, el array de likes tiene elementos)
+    if (tweet.likes.length > 0) {
+      // Añade a la estructura del tweet una lista de usuarios que le han dado like
+      tweetTemplate += `<p> estos usuarios: ${tweet.likes.join(', ')} han dado like al tweet</p>`;
+    }
+  
+    // Retorna la estructura completa del tweet
+    return tweetTemplate;
+}
+```
+
+
+importo la vista al constrolador
+```js
+import { getTweet } from "./tweetDetallModel.js";
+import { buildTweet } from "./tweetDetailView.js"; // importo la vista
+
+
+export const tweetDetailController = async (tweetDetail, tweetId) => {
+
+    try {
+        const tweet = await getTweet(tweetId);
+        tweetDetail.innerHTML = buildTweet(tweet); // ahora quiero pintar el tweet
+    } catch (error) {
+        alert(error)
+        window.location = "./index.html"; // si el tweet no existe ?id=5656 rediccionamos
+    }
+}
+```
+
+
+Ahora montamos el sistema de notificaciones:
+
+1. HTML
+
+```html
+<!--tweetDetail.html-->
+<section id="notifications"></section> <!--abro la seccion-->
+<link rel="stylesheet" href="./notifications/style.css" /> <!--añado los estilos-->
+```
+
+2. Nos vamos al `/tweet_detail/index.js`
+
+```html
+<!--tweetDetail.html-->
+<body>
+    <h1>detalle del tweet</h1>
+    
+    <section id="notifications"></section>
+
+    <section id="tweetDetail"></section>
+
+    <script type="module" src="./tweet_detail/index.js"></script> <!--puedes pinchar aquí directamente-->
+</body>
+
+```
+
+en 
+
+```js
+//import { tweetDetailController } from "./tweetDetailController.js";
+import { notificationsController } from "../notifications/notificationsController.js";
+
+
+
+//document.addEventListener('DOMContentLoaded', () => {
+
+  //const params = new URLSearchParams(window.location.search);
+  //const tweetId = params.get("id");
+
+  const notifications = document.querySelector("#notifications"); // identifico la seccion/nodo
+  notificationsController(notifications); // muestro notificaciones en el nodo
+
+  //const tweetDetail = document.querySelector('#tweetDetail');
+  //tweetDetailController(tweetDetail, tweetId);
+})
+```
+
+lo que quiero es que cuando dentro de `tweetDetailController(tweetDetail, tweetId);` se detecte un error en la carga del tweet, tengo que disarar un evento para que le padre diga, "" me ha llegado un evento de carga tweet erroneo." pues voy a mostrar mensaje através de una notificacion.
+
+Pues vamos al CONTROLADOR y disparar un evento. Ya hemos creado una utilidad para disarar eventos utils/dispatchEvent.js
+El nombre del evento me lo invento `tweetLoaded` , este `tweetDetail` es el nodo que queremos que dispare el evento.
+```JS
+//`tweetDetailControler.js`
+
+//import { getTweet } from "./tweetDetallModel.js";
+//import { buildTweet } from "./tweetDetailView.js"; 
+import { dispatchEvent } from "../utils/dispatchEvent.js";
+
+
+// export const tweetDetailController = async (tweetDetail, tweetId) => {
+
+//     try {
+//         const tweet = await getTweet(tweetId);
+//         tweetDetail.innerHTML = buildTweet(tweet); // ahora quiero pintar el tweet
+//     } catch (error) {
+//         alert(error)
+//         window.location = "./index.html"; // si el tweet no existe ?id=5656 rediccionamos
+        // datos que quiero que viajen en el evento
+        dispatchEvent('tweetLoaded', { type: "error", message: "El tweet no existe" }, tweetDetail);
+//     }
+// }
+```
+
+Ahora en el index.js defino los escuchadores. Acuerdate que lo hemos llamado dispatchEvent( **'tweetLoaded'** )
+
+
+```js
+// import { tweetDetailController } from "./tweetDetailController.js";
+// import { notificationsController } from "../notifications/notificationsController.js";
+
+
+// document.addEventListener('DOMContentLoaded', () => {
+//   const params = new URLSearchParams(window.location.search);
+//   const tweetId = params.get("id");
+
+//   const notifications = document.querySelector("#notifications"); 
+   const showNotification = notificationsController(notifications);
+
+//   const tweetDetail = document.querySelector('#tweetDetail');
+//   tweetDetailController(tweetDetail, tweetId);
+
+  tweetDetail.addEventListener('tweetLoaded', (event) => {
+    showNotification(event.detail.message,   // dentro del dispatchEvent ejecuto la función showNotification
+                     event.detail.type
+                    );
+  })
+
+//})
+```
+
+para no tener problemas de orden de eejecución bajamos la linea `tweetDetailController(tweetDetail, tweetId);` al final
+
+```js
+// import { tweetDetailController } from "./tweetDetailController.js";
+// import { notificationsController } from "../notifications/notificationsController.js";
+
+
+// document.addEventListener('DOMContentLoaded', () => {
+//   const params = new URLSearchParams(window.location.search);
+//   const tweetId = params.get("id");
+
+//   const notifications = document.querySelector("#notifications"); 
+   const showNotification = notificationsController(notifications);
+
+//   const tweetDetail = document.querySelector('#tweetDetail');
+
+  tweetDetail.addEventListener('tweetLoaded', (event) => {
+      showNotification(event.detail.message,   // dentro del dispatchEvent ejecuto la función showNotification
+                     event.detail.type
+                    );
+  })
+
+  tweetDetailController(tweetDetail, tweetId);
+//})
+```
+
+
+
+
+
 
 
 
