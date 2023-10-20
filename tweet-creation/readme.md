@@ -264,3 +264,82 @@ export const getTweets = async () => {
     return parsedTweets;  // Devuelve parsedTweets que ahora está definido en el ámbito de la función.
 }
 ```
+
+si lo pines en el navegador `http://127.0.0.1:8000/api/tweets?_expand=user` verás esto, enchufa los datos del usuario que puso el tweet, junta las dos keys.
+
+```json
+[
+  {
+    "message": "dede",
+    "userId": 22,
+    "updatedAt": "2023-10-20T18:10:40.793Z",
+    "id": 2,
+    "user": {
+      "username": "alexjustbarcelona1111@gmail.com",
+      "password": "$2b$10$3Tb7dxJdJFSwTuEXfVOBpOicnzm74ySMcm9vt91yNBhoDCCTDiTgG",
+      "id": 22
+    }
+  },
+  {
+    "message": "dede",
+    "userId": 22,
+    "updatedAt": "2023-10-20T18:10:49.816Z",
+    "id": 3,
+    "user": {
+      "username": "alexjustbarcelona1111@gmail.com",
+      "password": "$2b$10$3Tb7dxJdJFSwTuEXfVOBpOicnzm74ySMcm9vt91yNBhoDCCTDiTgG",
+      "id": 22
+    }
+  }
+]
+```
+
+ahora podemos cambiar el nombre del usuario en el MODELO
+
+```js
+// transformamos la info que nos llega de la api
+// const transformTweets = (tweets) => {
+//     return tweets.map(tweet => ({
+      handler: tweet.user.name,
+  //     date: new Date().toISOString(),
+  //     message: tweet.message,
+  //     id: tweet.id
+  //   }))
+  // }
+```
+
+¿cuando hemos de dejar al usuario que vea un botón para la creación de tweets? cuando se loguea
+¿tenemos alguna funcion que pinto algo en funcion si el usuario está logado o no? ./SESSION/sessionView
+
+```js
+// export const buildAuthenticatedSession = () => {
+// return `
+<a href="./tweet-creation.html">Create tweet</a>
+//<button>Cerrar sesión</button>`
+```
+
+
+PROTECCINOES: ahora mismo si  pones [/tweet-creation.html ](http://127.0.0.1:5500/tweet-creation.html)
+
+accedes directamente la página  ¿como lo protejes? miramos si tiene un token
+
+a primer nivel /twwet-creation/index.js
+
+```js
+const token = localStorage.getItem('token');
+if (!token) {
+  window.location = './index.html';
+}
+```
+
+INtegramos el sistema de notificaciones en la creacion de tweets
+
+
+
+
+
+
+
+
+
+
