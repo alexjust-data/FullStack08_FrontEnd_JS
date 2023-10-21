@@ -52,8 +52,7 @@ export const tweetListController = async (tweetList) => {
     } 
 }
 
-/**
- * Renderiza una lista de tweets en un contenedor del DOM.
+/** Renderiza una lista de tweets en un contenedor del DOM.
  *
  * @param {Array} tweets - Lista de tweets a renderizar.
  * @param {HTMLElement} tweetlist - Elemento del DOM donde se mostrarán los tweets.
@@ -67,8 +66,7 @@ const renderTweets = (tweets, tweetList) => {
     })
 }
 
-/**
- * Crea un evento personalizado para la gestión de tweets.
+/** Crea un evento personalizado para la gestión de tweets.
  *
  * @param {string} type - Tipo de evento (p. ej., 'error', 'success').
  * @param {string} message - Mensaje detallado del evento.
@@ -85,7 +83,7 @@ const createCustomEvent = (type, message) => {
 }
 
 
-/**
+/** 
  * Función para despachar un evento personalizado en un formulario.
  * 
  * @param {string} eventName - Nombre del evento personalizado a despachar.

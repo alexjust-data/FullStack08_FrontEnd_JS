@@ -16,3 +16,4 @@ return `
 <a href="./tweet-creation.html">Create tweet</a>
 <button>Cerrar sesión</button>`;
 }
+

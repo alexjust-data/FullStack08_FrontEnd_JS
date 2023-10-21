@@ -265,7 +265,7 @@ export const getTweets = async () => {
 }
 ```
 
-si lo pines en el navegador `http://127.0.0.1:8000/api/tweets?_expand=user` verás esto, enchufa los datos del usuario que puso el tweet, junta las dos keys.
+si lo pones en el navegador `http://127.0.0.1:8000/api/tweets?_expand=user` verás esto, enchufa los datos del usuario que puso el tweet, junta las dos keys.
 
 ```json
 [
@@ -447,12 +447,15 @@ export const getTweet = async (tweetId) => {
 de esto pasamos a esto 
 
 ```js
+/*Convierte la estructura de un tweet a un formato específico.*/
 const parseTweet = (tweet) => {
-    return {
-      handler: tweet.auser.username,   // Nombre de usuario del autor del tweet, ruta modificada
-      message: tweet.message,
-      likes: [] 
-    }
+  return {
+    handler: tweet.user.username,
+    message: tweet.message,
+    likes: [],
+    userId: tweet.user.id,
+    id: tweet.id
+  }
 }
 
 
@@ -460,6 +463,184 @@ export const getTweet = async (tweetId) => {
     const url = `http://localhost:8000/api/tweets/${tweetId}?_expand=user`;
 
 ```
+
+ahora el **end point** ya ha cambiado `http://127.0.0.1:5500/tweetDetail.html?id=2`
+
+
+**BORRADO DEL TWEET**
+sabemos si estamos logados o no pero necesitamos cierta informacion del user que está logado ¿hemos visto datos del user que ha inicializado sesion? Tenemos el token, si vas a https://jwt.io/ puedes ver que el token nos da esta infromacion 
+
+```json
+{
+  "userId": 1,
+  "username": "alexjustbarcelona@gmail.com",
+  "iat": 1697878336,
+  "exp": 1697964736
+}
+```
+
+si podemos leer los datos del token desde js tendríamos capacidad de saber de quien es el tweet. Si te fijas antes veíamos esto si lo pones en el navegador `http://127.0.0.1:8000/api/tweets?_expand=user` 
+
+```json
+[
+  {
+    "message": "dede",
+    "userId": 22,
+    "updatedAt": "2023-10-20T18:10:40.793Z",
+    "id": 2,
+    "user": {
+      "username": "alexjustbarcelona1111@gmail.com",
+      "password": "$2b$10$3Tb7dxJdJFSwTuEXfVOBpOicnzm74ySMcm9vt91yNBhoDCCTDiTgG",
+      "id": 22
+    }
+  }
+]
+```
+
+es decir por una parte nos dice tanto el id, como el correo del que creó el tweet y por otra parte tenemos un token que so lo decodificamos vamosa saber si userIda como el user.
+
+Lo que vamos hacer ahora es que vamos a decodificar el token vía JS, es sencillo porque es base64, pero lo correcto que es BD Sparrest tenga un endpont con el token en la cabecera , que haga la decodificacion por mi, normalmente lo hace la BD.
+
+Las medidas de SEGURIDAD siempre han de estar implementadas en la capa SERVIDOR; otra cosa es que adicionalmente en tu página web tu hagas ciertas comprovaciobnes para evitarle operaciones al usuario que tu sabes que no van a salir bien para que no tengan fustraciones ¿para que vas a montar un botón al usuario para un tweet que no es el suyo y no va a poder borrarlo? es como ... si el user no ha iniciado sesión para qué le voy a mostrar un botón de logado o cerrar sesión?
+
+Pero ahora vamos a usar esto ./utils/decodeToken.js :
+
+```js
+export const decodeToken = (token) => {
+  let decodedToken;
+
+  try {
+    const stringifiedToken = atob(token.split(".")[1]); // nos interesa el segundo del json token
+    decodedToken = JSON.parse(stringifiedToken);
+  } catch (error) {
+    return null;
+  }
+
+  return decodedToken;
+}
+```
+
+```json
+// {
+//   "userId": 1,
+  "username": "alexjustbarcelona@gmail.com", // nos interesa este por eso token.split(".")[1]
+//   "iat": 1697878336,
+//   "exp": 1697964736
+// }
+```
+
+nos creamos en `tweetDetailController.js`
+
+```js
+import { deleteTweet, getTweet } from "./tweetDetailModel.js"
+// import { buildTweet } from "./tweetDetailView.js"; 
+// import { dispatchEvent } from "../utils/dispatchEvent.js";
+import { decodeToken } from "../utils/decodeToken.js"
+
+// export const tweetDetailController = async (tweetDetail, tweetId) => {
+
+//     try {
+//         const tweet = await getTweet(tweetId);
+//         tweetDetail.innerHTML = buildTweet(tweet); // ahora quiero pintar el tweet
+        handleDeleteTweet(tweet, tweetDetail); // Evalúa si el usuario tiene permiso para eliminar un tweet
+//     } catch (error) {
+//         // alert(error)
+//         // datos que quiero que viajen en el evento
+//         dispatchEvent('tweetLoaded', 
+//                       { type: "error", message: "El tweet no existe" }, 
+//                       tweetDetail);
+//         setTimeout(() => {
+//             window.location = './index.html'; // si el tweet no existe ?id=5656 rediccionamos
+//           }, 3000);
+//     }
+// }
+
+
+/** Evalúa si el usuario tiene permiso para eliminar un tweet y, si es así, añade el botón de eliminación.*/
+const handleDeleteTweet = (tweet, tweetDetail) => {
+    // Obtiene el token JWT del almacenamiento local.
+    const token = localStorage.getItem('token');
+  
+    if (token) {
+      // Decodifica el token para obtener el ID del usuario.
+      const { userId } = decodeToken(token);
+  
+      // Si el ID del usuario coincide con el autor del tweet, agrega el botón de eliminación.
+      if (userId === tweet.userId) {
+        addDeleteTweetButton(tweet, tweetDetail);
+      }
+    }
+}
+
+/** Añade un botón de eliminación al tweet.*/
+const addDeleteTweetButton = (tweet, tweetDetail) => {
+    // Crea un nuevo botón.
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Borrar tweet';
+
+    // Añade un evento al botón para manejar la eliminación del tweet.
+    deleteButton.addEventListener('click', async () => {
+      if (confirm('¿Seguro que quieres borrar el tweet?')) {
+        await deleteTweet(tweet.id);
+        window.location = 'index.html';
+      }
+    })
+    // Añade el botón al elemento DOM del tweet.
+    tweetDetail.appendChild(deleteButton);
+}
+```
+
+Creo en el MODELO y creo la función que ya he puesto anteriormente  `deleteTweet.js`
+
+```js
+export const delete = async (tweetId) => { 
+};
+```
+
+Para borrar el recurso de un api se utiliza DELETE.
+
+pego dentro de la funcion --> Me copio el POST de creación del archivo `tweetCreationModel.js` 
+
+
+```js
+export const deleteTweet = async (tweetId) => {
+
+    // Me copio el POST de creación del archivo `tweetCreationModel.js` 
+
+    const url = `http://localhost:8000/api/tweets/${tweetId}`; 
+    const token = localStorage.getItem('token');
+
+    
+    // const body = {
+    //     message: message
+    // }
+
+    let response;
+    try {
+        response = await fetch(url, {
+        method: "DELETE",
+        // body: JSON.stringify(body),
+        headers: {
+          'Content-type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      if (error.message) {
+        throw error.message;
+      } else {
+        throw error;
+      }
+    }
+};
+```
+
+
 
 
 

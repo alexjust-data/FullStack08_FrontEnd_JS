@@ -14,10 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   const tweetDetail = document.querySelector('#tweetDetail');
-  tweetDetailController(tweetDetail, tweetId);
-
+  
   tweetDetail.addEventListener('tweetLoaded', (event) => {
     showNotification(event.detail.message, event.detail.type);
   })
   
+  tweetDetailController(tweetDetail, tweetId);
 })
