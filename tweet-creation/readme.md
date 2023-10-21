@@ -332,14 +332,134 @@ if (!token) {
 }
 ```
 
-INtegramos el sistema de notificaciones en la creacion de tweets
+Integramos el sistema de notificaciones en la creacion de tweets
 
 
+```html
+<!--tweet-creation.html-->
+<section id="notifications"></section>
+```
+
+```js
+// index.js
+// import { tweetCreationController } from "./tweetCreationController.js"
+import { notificationsController } from "./notifications/notificationController.js"
 
 
+// const token = localStorage.getItem('token');
+// if (!token) {
+//   window.location = './index.html';
+// }
 
 
+// document.addEventListener('DOMContentLoaded', () => {
+//     const tweetCreation = document.querySelector('#tweetCreation')
+//     tweetCreationController(tweetCreation);
 
+    const notifications = document.querySelector('#notifications');
+    const showNotification = notificationsController(notifications);
+
+  // })
+```
+
+
+```js
+// import { createTweet } from "./tweetCreationModel.js";
+import { dispatchEvent } from "../utils/dispatchEvent.js";
+
+// export const tweetCreationController = (tweetCreation) => {
+
+//   tweetCreation.addEventListener('submit', async (event) => {
+//     event.preventDefault();
+
+    // const formData = new FormData(tweetCreation);
+    // const message = formData.get("message");
+
+    try {
+      await createTweet(message);
+      // disparamos evento
+      dispatchEvent('tweetCreated',  // nombre propio del evento
+                    { type: "success", message: "Tweet creado correctamente" }, // tipo según botón del DOM
+                     tweetCreation); // nombre del nodo <form id="tweetCreation">
+      setTimeout(() => {
+        window.location = "index.html";
+      }, 2000);
+    } catch (error) {
+      dispatchEvent('tweetCreated', 
+                    { type: "error", message: "Error creando tweet" }, 
+                    tweetCreation);      
+    }
+
+//   })
+// }
+```
+
+Ahora tenemos que escuchar lo que pasa desde el index.js
+
+
+```js
+// import { tweetCreationController } from "./tweetCreationController.js";
+// import { notificationsController } from "../notifications/notificationsController.js";
+
+// const token = localStorage.getItem('token');
+// if (!token) {
+//   window.location = './index.html';
+// }
+
+// document.addEventListener('DOMContentLoaded', () => {
+//   const tweetCreation = document.querySelector('#tweetCreation');
+
+//   const notifications = document.querySelector('#notifications');
+//   const showNotification = notificationsController(notifications);
+
+  tweetCreation.addEventListener('tweetCreated', (event) => { // `nombre propio del evento dispatchEvent('tweetCreated')` 
+    showNotification(event.detail.message, event.detail.type); // función manejadora del evento
+  });
+
+  tweetCreationController(tweetCreation); // hemos bajado al final la creación del tweet
+
+// })
+```
+
+Si te fijas te dice que no existe e tweet, esto es porque hemos actualizado e modelo de datos en el listado de tweets, pero no hemos hecho en el detalle del tweet.
+
+Vamos al detalle del tweet: tweetDetailModels.js
+
+```js
+
+const parseTweet = (tweet) => {
+    return {
+      handler: tweet.author.toUpperCase(),   // <----- aquí te peta
+      photo: tweet.image,
+      message: tweet.message,         // Contenido del tweet.
+      likes: [],                      // Inicializa un array vacío para los 'likes'.
+      //userId: tweet.user.id,          // ID del usuario que publicó el tweet.
+      id: tweet.id                    // ID del tweet.
+    }
+}
+
+
+export const getTweet = async (tweetId) => {
+    // Define la URL para obtener el tweet basada en el ID proporcionado.
+    const url = `http://localhost:8000/api/tweets/${tweetId}`;
+```
+
+de esto pasamos a esto 
+
+```js
+const parseTweet = (tweet) => {
+    return {
+      handler: tweet.auser.username,   // Nombre de usuario del autor del tweet, ruta modificada
+      message: tweet.message,
+      likes: [] 
+    }
+}
+
+
+export const getTweet = async (tweetId) => {
+    const url = `http://localhost:8000/api/tweets/${tweetId}?_expand=user`;
+
+```
 
 
 

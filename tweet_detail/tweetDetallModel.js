@@ -7,14 +7,13 @@
  * @returns {Object} - Retorna un objeto con la estructura reformateada.
  */
 const parseTweet = (tweet) => {
-    return {
-      handler: tweet.author.toUpperCase(),   // Nombre de usuario del autor del tweet.
-      photo: tweet.image,
-      message: tweet.message,         // Contenido del tweet.
-      likes: [],                      // Inicializa un array vacío para los 'likes'.
-      //userId: tweet.user.id,          // ID del usuario que publicó el tweet.
-      id: tweet.id                    // ID del tweet.
-    }
+  return {
+    handler: tweet.user.username,
+    message: tweet.message,
+    likes: [],
+    userId: tweet.user.id,
+    id: tweet.id
+  }
 }
 
 
@@ -26,7 +25,7 @@ const parseTweet = (tweet) => {
  */
 export const getTweet = async (tweetId) => {
     // Define la URL para obtener el tweet basada en el ID proporcionado.
-    const url = `http://localhost:8000/api/tweets/${tweetId}`;
+    const url = `http://localhost:8000/api/tweets/${tweetId}?_expand=user`;
 
     let tweet;
 

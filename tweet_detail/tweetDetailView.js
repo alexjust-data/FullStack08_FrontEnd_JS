@@ -7,7 +7,6 @@ export const buildTweet = (tweet) => {
     // Define la estructura base del tweet con su nombre de usuario (handler) y su mensaje
     let tweetTemplate = `
         <span>${tweet.handler}</span>
-        <img src="${tweet.photo}" alt="tweet image">
         <p>${tweet.message}</p>
     `;
   
