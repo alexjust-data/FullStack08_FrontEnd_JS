@@ -642,5 +642,242 @@ export const deleteTweet = async (tweetId) => {
 
 
 
+PREGUNTA
+
+El opcional de la práctica del Update sería más menos el mismo proceso que esto para mostrar el botón y en el uthdate lo que haríamos sería el mismo formulario del create, pero cargando los valores con los valores del producto que te traiga.
+
+p:Sí, ahí yo te recomiendo que primero lo que haga sea duplicar el formulario. ¿Vale?Vale.Y luego intentes, hacer un refactor reutilizandolos, es relativamente sencillo. ¿Vale? Puedes muy fácilmente útiles reutilizar el controlador, que es lo más lo que debe reutilizar, porque ya el controlador engancha con el modelo y con la vista vale , ahí lo que deberías hacer es el controlador que reciba un parámetro más si es que estás en odo edicion. 
+
+El mismo controlador del crite se refiere? y ya para no duplicar el controlador con un Utdate.?
+
+p:Pero tú deberías darle la potestad a ese controlador. De decir, vale, ¿estoy en modo edición. O estoy en modo creación.? Para.Vale si estoy en modo edición, pues lo primero que voy a hacer es tú. Me tienes que pasar unos datos de fuera.Si tú quieres modificar un tweet, tú me tienes que pasar lo que está escrito en el tweet.
+
+Entonces.sería duplicar el Html. Eso sí, hay que duplicarlo para que te lleve una página que sea uptate, o tampoco sería necesario.
+
+p:tienes que la vista, la tienes que duplicar.La tienes que duplicar.Pero bueno, no te viene mal porque te quitan lógica de pintar el típico mensaje de venga actualiza.Sí.El tweet Vale, este tipo de tonterías. El botón, por ejemplo, que pongo a guardar en vez de crear sabes, eso es lógica que al final te quitas pero el controlador el controlador tú sí deberías utilizar el mismo formulario aunque esté duplicado, aunque tengas un formulario de creación y un formulario de edición esté controlado por el mismocontrolador. 
+
+Así lo puedes regularizar.Sí que en el formulario de edición, lo que hago es cargar el index de creación y pasar pasándole un argumento.
+
+p:O no no tendrá. O sea tú ten en cuenta que los Index Js van por pantalla, Vale, si tú tienes una pantalla de creación y una pantalla edición, tú vas a tener 2 index.Js: Vale, eso Sí, sin mantenerlo.Separado. Lo vemos.
+
+Pero desde Linda Jss, desde edición llamo al controlador desde creación, pero con el argumento extra, que es una edición que.Exacto. 
+
+p:De hecho, yo ya lo siguiente que haría sería renombrar ese controlador. 
+
+En vez de createte, pues así le pone algo más descriptivo, Sí, porque no lo está usando solo para la creación, sino también para palo.Sí que es prácticamente lo mismo.
+
+p:Entonces tú ya a ese controlador le tendrías que lo tendrías que vitaminar vale para que, además de crear que ya está creando, sea lo suficientemente inteligente para poder editar entonces si tú le pasa y tú le pasas ya un tuit que existe para que lo edite lo primero que tendrás que hacer será meterle una lógica adicional para que te inicialice el formulario con los datos delTweet ya te pinte, Por ejemplo, si lo único que podemos modificar de un tweet es el texto, pues que el test área ya no aparezca en blanco que aparezca con ese valor por defecto que tenemos que al final del curso válido.
+
+Si sería cambiando los valores de cada input para que te salgan.Exacto exacto ¿vale? Y a partir de ahí, ya, pues recto.Sí puede reutilizar toda la lógica si el modelo lo pueda reutilizar, porque bueno es para otro.En Point, sino el método. Sería un pacho.Sí. 
+
+p: Pero claro, al final tú, en ese controlador tendrás un Nif que sea. Estoy en modo creación, pues llamo al create Tweet.O sea.Estoy en modo edición. Consumo, él Edith Tweet, y hasta van a hacer métodos diferentes de tu modelo.
+
+
+Sí, en vez del método. Bueno, métodos en vez del post hace un puto. Ok, Ok.Un port alcalde de un foro masculino o un a que ahí a poco que le des un poquito de vuelta, lo saca.No es complicado.Si es que lo estuve pensando? Y, bueno, no tienes que repetir tampoco mucho código. Por eso te lo he preguntado.
+
+
+----
+
+
+Paro los que hagan los opcionales leeros esto https://www.npmjs.com/package/json-server
+
+stoy compartiendo. Siempre estuve igual.Vale, Jason sirve para los que os vengáis arriba y queráis hacerlos requisitos opcionales.Importante que esto lo leáis vale. Por ejemplo, el expand que yo he utilizado a salido de leerse, esto.Si aquí buscáis, expand, Vale, te dice para incluir un paren risas, o sea, un recurso padre, utiliza Alexand.Vale. Entonces, bueno, aquí hace un símil, con qué hay comentarios de un post, pues aquí serían los tweets y el usuario.Para que osáis una idea. Esto. Si os queréis hacer los requisitos opcionales.Es de obligada lectura. Bien, ¿vale?Ya hemos visto todo el temario que teníamos que ver
+
+
+**Refactorización de la pueza**
+
+vamos a refactorizar esto del modelo
+
+```js
+// /** Convierte la estructura de un tweet a un formato específico.
+//  * 
+//  * @param {Object} tweet - El objeto tweet original.
+//  * @returns {Object} - Retorna un objeto con la estructura reformateada.
+//  */
+// const parseTweet = (tweet) => {
+//   return {
+//     handler: tweet.user.username,
+//     message: tweet.message,
+//     likes: [],
+//     userId: tweet.user.id,
+//     id: tweet.id
+//   }
+// }
+
+
+// /** Obtiene un tweet específico desde el backend por su ID.
+//  * 
+//  * @param {number} tweetId - El ID del tweet a recuperar.
+//  * @returns {Object} - Retorna el tweet solicitado.
+//  * @throws {Error} - Lanza un error si la respuesta no es exitosa o si hay otros problemas.
+//  */
+export const getTweet = async (tweetId) => {
+    // Define la URL para obtener el tweet basada en el ID proporcionado.
+    const url = `http://localhost:8000/api/tweets/${tweetId}?_expand=user`;
+
+    let tweet;
+
+    try {
+        // Realiza una solicitud GET al servidor para obtener el tweet.
+        const response = await fetch(url);
+
+        // Verifica si la respuesta es exitosa.
+        if (response.ok) {
+          // Convierte la respuesta a un objeto JSON y la retorna.
+          tweet = await response.json();
+          //return data;
+        } else {
+          // Si la respuesta no es exitosa, extrae el mensaje de error o usa un mensaje por defecto.
+          //const message = tweet.message || 'Ha ocurrido un error';
+          throw new Error("caca message");
+        }
+    } catch (error) {
+        // Propaga el error para ser manejado en otro lugar.
+        throw error.message;
+    }
+
+    return parseTweet(tweet);
+}
+
+
+export const deleteTweet = async (tweetId) => {
+
+  // Me copio el POST de creación del archivo `tweetCreationModel.js` 
+  // modifico cosas
+
+  const url = `http://localhost:8000/api/tweets/${tweetId}`; 
+  const token = localStorage.getItem('token');
+
+  let response;
+  try {
+      response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (!response.ok) {
+      const data = await response.json()
+      throw new Error(data.message);
+    }
+  } catch (error) {
+    if (error.message) {
+      throw error.message;
+    } else {
+      throw error;
+    }
+  }
+};
+```
+
+y vamos hace una pieza y que esta pieza sea parametrizable con el EndPoint, datos , el cerbo, etc
+Lo haremos en ./utils/sparrestApi.js
+
+```js
+// Define un módulo que interactúa con la API de Sparrest.
+export const sparrestApi = () => {
+    
+    const baseUrl = "http://localhost:8000/"; // Establece la URL base del servidor. (en ago comun)
+  
+    // Función asíncrona para realizar peticiones GET a un endpoint específico.
+    const get = async (endpoint) => {
+      const url = baseUrl + endpoint;          // Construye la URL completa.
+      try {
+        const response = await fetch(url);     // Intenta obtener datos del servidor.
+        if (response.ok) {
+          const data = await response.json();  // convierte el cuerpo a JSON y devuélvelo.
+          return data;
+        } else {
+          const message = data.message || 'Ha ocurrido un error';
+          throw new Error(message);
+        }
+      } catch (error) {
+        throw error.message; // Propaga el mensaje de error para ser manejado externamente.
+      }
+    };
+  
+    // Función asíncrona para eliminar un recurso en un endpoint específico.
+    const remove = async (endpoint) => {
+      const url = baseUrl + endpoint;
+      // Obtiene el token del almacenamiento local, necesario para autenticar la petición DELETE.
+      const token = localStorage.getItem('token');
+  
+      try {
+        // Intenta eliminar el recurso.
+        response = await fetch(url, {
+          method: "DELETE",
+          headers: {
+            'Content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if (!response.ok) {
+          // Si hay un error, intenta obtener el mensaje del servidor o usa un mensaje por defecto.
+          const data = await response.json();
+          const message = data.message || 'No ha sido posible borrar el elemento';
+          throw new Error(message);
+        }
+      } catch (error) {
+        // Propaga el mensaje de error para ser manejado externamente.
+        if (error.message) {
+          throw error.message;
+        } else {
+          throw error;
+        }
+      }
+    }
+  
+    // Devuelve las funciones 'get' y 'delete' para ser utilizadas externamente.
+    return {
+      get: get,
+      delete: remove
+    }
+}
+```
+
+
+Entonces en el MODELO refectorizamos así
+
+
+```JS
+import { sparrestApi } from "../utils/sparrestApi.js"
+
+
+
+/** Transforma la estructura de un tweet a un formato específico.*/
+const parseTweet = (tweet) => {
+  return {
+    handler: tweet.user.username,  // Nombre de usuario del autor del tweet.
+    message: tweet.message,        // Mensaje del tweet.
+    likes: [],                     // Inicialmente define los likes como un arreglo vacío.
+    userId: tweet.user.id,         // ID del usuario que creó el tweet.
+    id: tweet.id                   // ID del tweet.
+  }
+}
+
+/** Obtiene un tweet específico desde el servidor por su ID, y expande el objeto usuario. */
+export const getTweet = async (tweetId) => {
+  const endpoint = `api/tweets/${tweetId}?_expand=user`; // Define el endpoint incluyendo la expansión del usuario.
+  // Usa la función sparrestApi para hacer una solicitud GET al servidor.
+  const tweet = await sparrestApi().get(endpoint);
+
+  return parseTweet(tweet); // Retorna el tweet transformado.
+}
+
+/** Elimina un tweet específico del servidor usando su ID */
+export const deleteTweet = async (tweetId) => {
+  const endpoint = `api/tweets/${tweetId}`; // Define el endpoint para eliminar el tweet.
+  await sparrestApi().delete(endpoint); // sparrestApi() para hacer una solicitud DELETE al servidor.
+}
+```
+
+
+
+
+**Subir una imagen a un proveeder de tereros y se guarde en una BBDD**
+
 
 
